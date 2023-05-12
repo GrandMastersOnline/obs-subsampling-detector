@@ -27,7 +27,7 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 struct subsampling_detector {
 	obs_source_t *const source;
 
-	gs_effect_t *effect = NULL;
+	gs_effect_t *effect;
 	gs_eparam_t *texture_width, *texture_height;
 	gs_eparam_t *color_param;
 
