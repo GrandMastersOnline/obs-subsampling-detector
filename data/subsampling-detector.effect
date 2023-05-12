@@ -1,0 +1,74 @@
+uniform float4x4 ViewProj;
+uniform texture2d image;
+
+uniform float texture_width;
+uniform float texture_height;
+uniform float4 color;
+
+sampler_state texSampler {
+	AddressU  = Clamp;
+	AddressV  = Clamp;
+	Filter    = Linear;
+};
+
+struct VertexInOut {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertexInOut VShader(VertexInOut vert_in)
+{
+	VertexInOut vert_out;
+
+	vert_out.pos = mul(float4(vert_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv = vert_in.uv;
+	
+	return vert_out;
+}
+
+float4 PShader(VertexInOut fragment_in) : TARGET
+{
+	float dx = 1.0 / texture_width;
+	float dy = 1.0 / texture_height;
+
+	float pix = floor(fragment_in.uv.x / dx);
+	float piy = floor(fragment_in.uv.y / dy);
+
+	float3 t1 = fragment_in.uv.xxy + float3(0, dx, 0);
+	float3 t2 = fragment_in.uv.xxy + float3(0, dx, dy);
+
+	if (mod(pix, 2) == 1) {
+		t1.x -= dx;
+		t1.y -= dx;
+		t2.x -= dx;
+		t2.y -= dx;
+	}
+	if (mod(piy, 2) == 1) {
+		t1.z -= dy;
+		t2.z -= dy;
+	}
+
+	float4 X = image.Sample(texSampler, fragment_in.uv);
+	float4 A = image.Sample(texSampler, t1.xz);
+	float4 B = image.Sample(texSampler, t1.yz);
+	float4 C = image.Sample(texSampler, t2.xz);
+	float4 D = image.Sample(texSampler, t2.yz);
+
+	float4 avg = (A + B + C + D) / float4(4, 4, 4, 4);
+	float dist = distance(avg, X);
+
+	if (dist > 0.05) {
+		return color;
+	}
+
+	return X;
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VShader(vert_in);
+		pixel_shader  = PShader(fragment_in);
+	}
+}

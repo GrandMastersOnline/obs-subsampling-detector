@@ -81,8 +81,8 @@
             "qtVersion": 6
         }
     },
-    "name": "obs-plugintemplate",
+    "name": "obs-subsampling-detector",
     "version": "1.0.0",
-    "author": "Your Name Here",
-    "email": "me@mymailhost.com"
+    "author": "Tomasz Żyźniewski",
+    "email": "tomasz.zyzniewski@grandmasters.online"
 }
