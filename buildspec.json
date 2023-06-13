@@ -82,7 +82,7 @@
         }
     },
     "name": "obs-subsampling-detector",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "Tomasz Żyźniewski",
     "email": "tomasz.zyzniewski@grandmasters.online"
 }
