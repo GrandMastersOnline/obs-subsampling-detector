@@ -37,13 +37,13 @@ float4 PShader(VertexInOut fragment_in) : TARGET
 	float3 t1 = fragment_in.uv.xxy + float3(0, dx, 0);
 	float3 t2 = fragment_in.uv.xxy + float3(0, dx, dy);
 
-	if (mod(pix, 2) == 1) {
+	if (fmod(pix, 2) == 1) {
 		t1.x -= dx;
 		t1.y -= dx;
 		t2.x -= dx;
 		t2.y -= dx;
 	}
-	if (mod(piy, 2) == 1) {
+	if (fmod(piy, 2) == 1) {
 		t1.z -= dy;
 		t2.z -= dy;
 	}
